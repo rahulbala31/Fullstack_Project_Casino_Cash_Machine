@@ -43,14 +43,31 @@ TECH STACK
 
 SYSTEM WORKFLOW:
 
-User scans QR code using a physical scanner
+1 User scans QR code using a physical scanner
 
-System prompts for PIN + QR password
+2 System prompts for PIN + QR password
 
-Backend validates QR and authentication
+3 Backend validates QR and authentication
 
-Cash denomination is calculated based on availability
+4 Cash denomination is calculated based on availability
 
-Transaction is logged in database
+5 Transaction is logged in database
 
-System dispenses simulated cash and prints receipt
+6 System dispenses simulated cash and prints receipt
+
+
+SECURITY FEATURES:
+
+1 One-time-use encrypted QR codes
+2 4-digit PIN authentication
+3 Unique QR password verification
+4 Automatic expiration after 24 hours
+5 Cleanup service for old QR records(After 30 days)
+
+
+ADMIN CAPABILITIES:
+
+1Monitor redeemed and expired QR codes
+2View transaction history
+3Manage denomination tracking
+4Automatic cleanup of old QR data
