@@ -1,7 +1,7 @@
 # Fullstack_Project_Casino_Cash_Machine
 The QR-Based Cash Redeem System is a secure kiosk-style application designed for casino environments that allows customers to redeem winnings using a one-time encrypted QR code. The system combines backend services, a responsive frontend, and hardware integration to simulate a real-world automated cash redemption machine.
 
-Features
+FEATURES:
 
 >One-time encrypted QR code redemption
 
@@ -24,7 +24,7 @@ Features
 >Hardware integration (QR scanner, vibration feedback, receipt printer)
 
 
-Tech Stack
+TECH STACK
 
 >Java
 
@@ -41,7 +41,7 @@ Tech Stack
 >JavaScript
 
 
-System Workflow
+SYSTEM WORKFLOW:
 
 User scans QR code using a physical scanner
 
