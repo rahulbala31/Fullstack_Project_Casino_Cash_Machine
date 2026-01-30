@@ -3,17 +3,25 @@ The QR-Based Cash Redeem System is a secure kiosk-style application designed for
 
 Features
 
--One-time encrypted QR code redemption
+>One-time encrypted QR code redemption
 
--PIN + QR password authentication
--Role-based access (Admin / User / Guest / Demo)
--QR code expiration (24-hour validity)
--Automatic cleanup of expired QR codes
--Optimal cash denomination calculation
--Real-time transaction logging
--Admin monitoring dashboard
--Casino-themed frontend UI
--Hardware integration (QR scanner, vibration feedback, receipt printer)
+>PIN + QR password authentication
+
+>Role-based access (Admin / User / Guest / Demo)
+
+>QR code expiration (24-hour validity)
+
+>Automatic cleanup of expired QR codes
+
+>Optimal cash denomination calculation
+
+>Real-time transaction logging
+
+>Admin monitoring dashboard
+
+>Casino-themed frontend UI
+
+>Hardware integration (QR scanner, vibration feedback, receipt printer)
 
 
 
