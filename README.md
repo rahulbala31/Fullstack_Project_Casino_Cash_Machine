@@ -41,4 +41,16 @@ Tech Stack
 >JavaScript
 
 
+System Workflow
 
+User scans QR code using a physical scanner
+
+System prompts for PIN + QR password
+
+Backend validates QR and authentication
+
+Cash denomination is calculated based on availability
+
+Transaction is logged in database
+
+System dispenses simulated cash and prints receipt
