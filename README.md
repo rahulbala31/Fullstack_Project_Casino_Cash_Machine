@@ -26,27 +26,13 @@ Features
 
 Tech Stack
 
->Backend
+>Java
+>Spring Boot
+>REST APIs
+>MySQL
+>HTML
+>CSS
+>JavaScript
 
-  Java
-  
-  Spring Boot
-  
-  REST APIs
-  
-  MySQL
-  
->Frontend
-
-  HTML
-  
-  CSS
-  
-  JavaScript
-  
->Hardware Integration
-  Physical QR code scanner
-  
-  Receipt printer interface
 
 
