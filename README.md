@@ -27,11 +27,17 @@ Features
 Tech Stack
 
 >Java
+
 >Spring Boot
+
 >REST APIs
+
 >MySQL
+
 >HTML
+
 >CSS
+
 >JavaScript
 
 
