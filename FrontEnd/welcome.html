@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CSS Casino</title>
+
+    <link rel="stylesheet" href="assets/css/master.css">
+    <link rel="stylesheet" href="assets/css/header.css">
+    <link rel="stylesheet" href="assets/css/bar.css">
+    <link rel="stylesheet" href="assets/css/cards.css">
+    <link rel="stylesheet" href="assets/css/roulette.css">
+    <link href="https://fonts.googleapis.com/css?family=Bungee+Hairline" rel="stylesheet">
+    <!-- JS script to DRY up code and not have to deal with vendor prefixes -->
+    <script type="text/javascript">
+      "./lib/prefixfree.min.js"
+    </script>
+    <!-- Another script here to make the snippet code look nicer :) -->
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+  </head>
+
+  <body style="background: radial-gradient(#000, #111); overflow-x: hidden;">
+
+    <div class="header">
+      <section class="header-content">
+        <img src="./assets/images/title.jpg" alt="css casino" id="header-logo"/>
+        <div id="tagline">
+          <p>
+            💰 💰 💰 💰 💰 $ $ $ $ $ 💰 💰 💰 💰 💰
+          </p>
+          <p id="credits">
+            We Welcome You
+          </p>
+
+          <h1>SCROLL DOWN TO REDEEM & EXPLORE</h1>
+
+
+        </div>
+      </section>
+    </div>
+
+    <hr style="color: #ffffff;">
+
+    <div class="welcome-section" style="background-color: #000000; padding: 40px 0;">
+  <section class="welcome-content" style="text-align: center; max-width: 800px; margin: auto;">
+
+    <h1 style="color: #ffffff; font-size: 40px; margin-bottom: 30px; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; font-size: medium;">CLICK BELOW TO REDEEM</h1>
+
+    <p style="font-size: 20px; color: #ffffff;">
+      <span class="info-icon" style="font-size: 28px; cursor: pointer; margin-left: 10px; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;" onclick="toggleInstructions()">View Instructions</span>
+    </p>
+
+    <div class="instructions" id="instructions" style="display: none; margin: 20px auto; padding: 20px; background-color: #222; border: 2px solid #000; border-radius: 15px; width: 80%; text-align: left; color: white;">
+      <h3 style="color: #FFD700;">How to Redeem Cash</h3>
+      <ol>
+        <li>Scan or enter your QR Code on the next screen.</li>
+        <li>Enter your PIN to authenticate.</li>
+        <li>System will verify the code and show your cash reward.</li>
+        <li>Click "Dispense" to collect your cash.</li>
+        <li>A receipt will be generated for your record.</li>
+      </ol>
+    </div>
+
+    <!-- Redeem Button with Neon Effect -->
+    <div style="display: flex; justify-content: center; margin-top: 30px;">
+      <button class="redeem-btn" onclick="window.location.href='index.html'">Redeem</button>
+    </div>
+
+  </section>
+</div>
+
+
+
+    <div class="cards-flip">
+      <section class="cards-section">
+        <div class="cards">
+          <div class="card-container" >
+            <div class="card">
+              <div class="front-card" id="ace"></div>
+              <div class="back-card"></div>
+            </div>
+          </div>
+
+          <div class="card-container">
+            <div class="card">
+              <div class="front-card" id="king"></div>
+              <div class="back-card"></div>
+            </div>
+          </div>
+
+          <div class="card-container">
+            <div class="card">
+              <div class="front-card" id="queen"></div>
+              <div class="back-card"></div>
+            </div>
+          </div>
+
+          <div class="card-container">
+            <div class="card">
+              <div class="front-card" id="jack"></div>
+              <div class="back-card"></div>
+            </div>
+          </div>
+
+          <div class="card-container">
+            <div class="card">
+              <div class="front-card" id="ten"></div>
+              <div class="back-card"></div>
+            </div>
+          </div>
+        </div>
+        <div class="code-snippet">
+          <h1 class="code-snippet">
+          With Your Rewards, Play More Games!
+          </h1>
+        </div>
+      </section>
+    </div>
+
+
+<!-- CSS Styles -->
+<style>
+
+    .info-icon{
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-weight: bolder;
+        font-style: italic;
+    }
+
+  .redeem-btn {
+    background-color: #000;
+    color: #FFD700;
+    border: 2px solid #FFD700;
+    padding: 0px 225px;
+    font-size: 43px;
+    font-weight: bold;
+    border-radius: 70px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    line-height: 40px;
+    
+
+  
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .redeem-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #FFD700, 0 0 40px #FFA500;
+  }
+
+  /* Neon Sparkle Effect */
+  .redeem-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transform: skewX(-20deg);
+  }
+
+  .redeem-btn:hover::after {
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { left: -75%; }
+    100% { left: 125%; }
+  }
+</style>
+
+<script>
+  function toggleInstructions() {
+    const instructions = document.getElementById('instructions');
+    instructions.style.display = instructions.style.display === 'none' || instructions.style.display === '' ? 'block' : 'none';
+  }
+</script>
+
+
+    <div class="cards-fan">
+      <section class="cards-fan-section">
+        <div class="cards-fan-container">
+          <img src="./assets/images/Ace.png" alt="ace card" class="card-fan" id="ace-fan"/>
+          <img src="./assets/images/King.png" alt="king card" class="card-fan" id="king-fan"/>
+          <img src="./assets/images/Queen.png" alt="queen card" class="card-fan" id="queen-fan"/>
+          <img src="./assets/images/Jack.png" alt="jack card" class="card-fan" id="jack-fan"/>
+          <img src="./assets/images/Ten.png" alt="ten card"
+          class="card-fan" id="ten-fan"/>
+        </div>
+
+        <div class="code-snippet" id="fan-snip">
+          
+        </div>
+      </section>
+    </div>
+
+    <div class="roulette">
+      <section class="roulette-content">
+        <div class="window">
+          <img src="./assets/vectors/roulette-wheel.svg" alt="roulette wheel"
+          id="wheel"/>
+        </div>
+
+        <div class="code-snippet">
+
+        </div>
+      </section>
+    </div>
+
+    <div class="bar">
+      <section class="bar-content">
+        <div class="bar-section">
+          <img src="./assets/vectors/cocktail_shaker.svg" alt="shaker" id="shaker" />
+          <img src="./assets/vectors/lemon.svg" alt="lemon" id="lemon"/>
+          <img src="./assets/vectors/martini.svg" alt="martini" id="martini" />
+
+        </div>
+
+        <div class="code-snippet">
+          <H1 class="code-snippet">
+            Try Our Refreshments Before you leave!
+          </h1>
+        </div>
+      </section>
+    </div>
+  </body>
+
+</html>

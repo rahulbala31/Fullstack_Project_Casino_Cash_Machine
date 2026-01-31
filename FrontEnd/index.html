@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Enter QR Code - Casino Cash Machine</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <style>
+    /* Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Orbitron', sans-serif;
+      height: 100vh;
+      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #FFD700;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.8);
+      border: 2px solid #FFD700;
+      padding: 40px;
+      border-radius: 15px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #FFD700;
+    }
+
+    input {
+      padding: 12px;
+      width: 250px;
+      border: 2px solid #FFD700;
+      background: #222;
+      color: #fff;
+      font-size: 16px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      padding: 12px 20px;
+      background-color: #FFD700;
+      color: #000;
+      border: none;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #FFA500;
+    }
+
+    #message {
+      margin-top: 15px;
+      font-size: 16px;
+    }
+
+    /* Background Animation */
+    .particles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: rgba(255, 215, 0, 0.6);
+      border-radius: 50%;
+      animation: floatUp linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh);
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-10vh);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating particles -->
+  <div class="particles" id="particles"></div>
+
+  <div class="container">
+    <h1>🎰 Welcome to Casino Cash Machine</h1>
+    <form id="qrForm">
+      <input type="text" id="qrInput" placeholder="Enter QR Code" required />
+      <br />
+      <button type="submit">Validate</button>
+    </form>
+    <p id="message"></p>
+  </div>
+
+  <script>
+    // QR form validation logic
+    document.getElementById("qrForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const code = document.getElementById("qrInput").value.trim();
+      const message = document.getElementById("message");
+
+      fetch(`http://localhost:8081/api/qr/validate?code=${encodeURIComponent(code)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.valid) {
+            const name = encodeURIComponent(data.name || "Customer");
+            window.location.href = `pin.html?code=${code}&name=${name}`;
+          } else {
+            message.textContent = "❌ Invalid or Expired QR Code";
+            message.style.color = "red";
+          }
+        })
+        .catch(() => {
+          message.textContent = "❌ Server error. Please try again.";
+          message.style.color = "red";
+        });
+    });
+
+    // Generate background particles
+    const particleContainer = document.getElementById("particles");
+    for (let i = 0; i < 80; i++) {
+      const particle = document.createElement("div");
+      particle.classList.add("particle");
+      particle.style.left = `${Math.random() * 100}%`;
+      particle.style.animationDuration = `${5 + Math.random() * 5}s`;
+      particle.style.animationDelay = `${Math.random() * 5}s`;
+      particleContainer.appendChild(particle);
+    }
+  </script>
+</body>
+</html>

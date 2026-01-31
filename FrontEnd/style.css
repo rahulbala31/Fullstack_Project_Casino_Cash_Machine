@@ -1,0 +1,46 @@
+body.casino-bg3 {
+  margin: 0;
+  height: 100vh;
+  background-image: url('assets/casino-bg3.webp');
+  background-size: cover;
+  background-position: center;
+  font-family: 'Segoe UI', sans-serif;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 800px;
+  
+}
+
+.center-box {
+  background: rgba(0, 0, 0, 0.7);
+  padding: 40px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+input[type="text"] {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  width: 200px;
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: gold;
+  color: black;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: orange;
+}

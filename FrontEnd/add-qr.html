@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add QR Code - Casino Cash System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #f2f2f2;
+      text-align: center;
+      padding-top: 40px;
+    }
+    h1 {
+      color: #FFD700;
+    }
+    form {
+      display: inline-block;
+      background-color: #222;
+      padding: 20px;
+      border-radius: 10px;
+      border: 2px solid #FFD700;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px 0;
+      width: 250px;
+      font-size: 16px;
+    }
+    input {
+      background: #333;
+      color: white;
+      border: 1px solid #555;
+    }
+    button {
+      background: #FFD700;
+      color: black;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #FFA500;
+    }
+    .message {
+      margin-top: 20px;
+    }
+    #printSection {
+      display: none;
+      margin-top: 30px;
+      color: #FFD700;
+      background: #222;
+      padding: 20px;
+      border: 2px dashed #FFD700;
+      border-radius: 8px;
+    }
+    #qrcode {
+      margin-bottom: 15px;
+    }
+
+    /* PRINT STYLES */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printSection, #printSection * {
+        visibility: visible;
+      }
+      #printSection {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 40px;
+        background-color: white !important;
+        color: black !important;
+        border: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎰 Add Casino QR Code</h1>
+
+  <form id="qrForm">
+    <input type="text" id="code" placeholder="QR Code String" required><br>
+    <input type="text" id="customerName" placeholder="Customer Name" required><br>
+    <input type="number" id="rewardAmount" placeholder="Reward Amount (USD)" required><br>
+    <input type="number" id="userId" placeholder="User ID (existing)" required><br>
+    <button type="submit">Add QR Code</button>
+  </form>
+
+  <div class="message" id="message"></div>
+
+  <div id="printSection">
+    <div id="qrcode"></div>
+    <p><strong>QR Code:</strong> <span id="printCode"></span></p>
+    <p><strong>Password:</strong> <span id="printPassword"></span></p>
+    <button onclick="window.print()">🖨️ Print QR Code Info</button>
+  </div>
+
+  <!-- QR Code Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <script>
+    const form = document.getElementById('qrForm');
+    const messageDiv = document.getElementById('message');
+    const printSection = document.getElementById('printSection');
+    const printCode = document.getElementById('printCode');
+    const printPassword = document.getElementById('printPassword');
+
+    function getCurrentDateTimeLocal() {
+      const now = new Date();
+      now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+      return now.toISOString().slice(0, 16);
+    }
+
+    function generateRandomPassword(length = 8) {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const code = document.getElementById('code').value.trim();
+      const customerName = document.getElementById('customerName').value.trim();
+      const rewardAmount = parseFloat(document.getElementById('rewardAmount').value);
+      const userId = parseInt(document.getElementById('userId').value);
+
+      const issuedAt = getCurrentDateTimeLocal();
+      const password = generateRandomPassword();
+
+      const payload = {
+        code,
+        customerName,
+        rewardAmount,
+        issuedAt,
+        userId,
+        password,
+        used: false,
+        expired: false
+      };
+
+      try {
+        const response = await fetch('http://localhost:8081/api/qr/add', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.text();
+
+        if (response.ok) {
+          messageDiv.style.color = 'lightgreen';
+          messageDiv.textContent = '✅ QR Code added successfully!';
+          form.reset();
+
+          // Show printable QR code + password
+          printCode.textContent = code;
+          printPassword.textContent = password;
+          printSection.style.display = 'block';
+
+          // Clear previous QR
+          document.getElementById('qrcode').innerHTML = '';
+
+          // Generate QR code
+          new QRCode(document.getElementById("qrcode"), {
+            text: code,
+            width: 128,
+            height: 128,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+          });
+
+        } else {
+          messageDiv.style.color = 'tomato';
+          messageDiv.textContent = '❌ Error: ' + result;
+          printSection.style.display = 'none';
+        }
+
+      } catch (err) {
+        messageDiv.style.color = 'tomato';
+        messageDiv.textContent = '❌ Could not connect to server';
+        printSection.style.display = 'none';
+      }
+    });
+  </script>
+
+</body>
+</html>

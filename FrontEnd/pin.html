@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Enter PIN</title>
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #1a1a1a, #000);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      color: #FFD700;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.85);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 25px #FFD700;
+      text-align: center;
+      width: 380px;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .expiry {
+      font-size: 14px;
+      margin-bottom: 20px;
+      color: #FFA500;
+    }
+
+    input[type="password"] {
+      width: 90%;
+      padding: 12px 15px;
+      margin: 10px 0;
+      border: 2px solid #FFD700;
+      border-radius: 10px;
+      background-color: #111;
+      color: #FFD700;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: space-around;
+      margin: 5px 0 15px 0;
+    }
+
+    button {
+      padding: 10px 15px;
+      margin-top: 5px;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background-color: #FFD700;
+      color: black;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .submit-btn:hover {
+      background-color: #FF4500;
+      color: white;
+    }
+
+    .exit-btn {
+      background-color: #444;
+      color: #FFD700;
+      width: 100%;
+    }
+
+    .exit-btn:hover {
+      background-color: #666;
+      color: white;
+    }
+
+    .control-btn {
+      background-color: #333;
+      color: #FFD700;
+    }
+
+    #message {
+      margin-top: 15px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="welcomeMessage">Welcome!</h1>
+    <div class="expiry" id="expiryText">Valid till: --</div>
+
+    <form id="pinForm">
+      <input type="password" id="pinInput" placeholder="Enter 4-digit PIN" maxlength="4" required />
+      <div class="btn-row">
+        <button type="button" class="control-btn" onclick="clearInput('pinInput')">Clear PIN</button>
+        <button type="button" class="control-btn" onclick="backspace('pinInput')">Backspace PIN</button>
+      </div>
+
+      <input type="password" id="qrPassword" placeholder="Enter QR Code Password" required />
+      <div class="btn-row">
+        <button type="button" class="control-btn" onclick="clearInput('qrPassword')">Clear Password</button>
+        <button type="button" class="control-btn" onclick="backspace('qrPassword')">Backspace</button>
+      </div>
+
+      <button type="submit" class="submit-btn">Submit</button>
+      <button type="button" class="exit-btn" id="exitBtn">Exit</button>
+    </form>
+    <p id="message"></p>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get("code");
+    const name = urlParams.get("name") || "Customer";
+
+    document.getElementById("welcomeMessage").textContent = `Welcome, ${decodeURIComponent(name)} 🎉`;
+
+    document.getElementById("exitBtn").onclick = () => {
+      window.location.href = "welcome.html";
+    };
+
+    fetch(`http://localhost:8081/api/atm/qr-info?qrCode=${encodeURIComponent(code)}`)
+      .then(res => res.json())
+      .then(data => {
+        const issuedAt = new Date(data.issuedAt);
+        const expiry = new Date(issuedAt.getTime() + 24 * 60 * 60 * 1000);
+        document.getElementById("expiryText").textContent = "Valid till: " + expiry.toLocaleString();
+      });
+
+    document.getElementById("pinForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const pin = document.getElementById("pinInput").value.trim();
+      const qrPassword = document.getElementById("qrPassword").value.trim();
+      const message = document.getElementById("message");
+
+      fetch("http://localhost:8081/api/auth/validate-pin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          qrCode: code,
+          pin: pin,
+          password: qrPassword
+        }),
+      })
+        .then(response => response.text())
+        .then(data => {
+          if (data.startsWith("✅")) {
+            window.location.href = `dispense.html?code=${encodeURIComponent(code)}`;
+          } else {
+            message.textContent = data;
+            message.style.color = "red";
+          }
+        })
+        .catch(error => {
+          console.error("Error:", error);
+          message.textContent = "❌ Server error. Please try again.";
+          message.style.color = "red";
+        });
+    });
+
+    function clearInput(id) {
+      document.getElementById(id).value = '';
+    }
+
+    function backspace(id) {
+      const field = document.getElementById(id);
+      field.value = field.value.slice(0, -1);
+    }
+  </script>
+</body>
+</html>

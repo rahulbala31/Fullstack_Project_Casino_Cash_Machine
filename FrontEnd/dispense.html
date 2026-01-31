@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cash Dispense</title>
+  <style>
+    body {
+      background: url('https://images.unsplash.com/photo-1588776814546-cb2b27cb354d') center/cover no-repeat fixed;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 25px #FFD700;
+      text-align: center;
+      max-width: 500px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    h1 {
+      font-size: 32px;
+      color: #FFD700;
+    }
+
+    p, h3 {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background-color: #111;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 10px;
+      border: 1px solid #FFD700;
+    }
+
+    #dispenseInfo {
+      font-style: italic;
+      color: #FFD700;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Inside the .container -->
+<h1>🎰 Congratulations!</h1>
+<p id="dispenseInfo">Processing your reward...</p>
+
+<div id="details" style="display: none;">
+  <p><strong>Amount:</strong> <span id="amount"></span> USD</p>
+  <h3>Dispensed Denominations:</h3>
+  <ul id="denominations"></ul>
+  <button onclick="goHome()" style="margin-top: 20px; padding: 10px 20px; background-color: #444; color: #FFD700; border: none; border-radius: 10px; font-size: 16px; cursor: pointer;">
+    Return to Main Page
+  </button>
+</div>
+
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const code = urlParams.get("code");
+
+  const amountEl = document.getElementById("amount");
+  const dispenseInfo = document.getElementById("dispenseInfo");
+  const details = document.getElementById("details");
+  const denominationsList = document.getElementById("denominations");
+
+  async function fetchQRInfo() {
+    const res = await fetch(`http://localhost:8081/api/atm/qr-info?qrCode=${encodeURIComponent(code)}`);
+    if (!res.ok) throw new Error("QR info fetch failed");
+    const data = await res.json();
+    amountEl.textContent = data.amount;
+    return data.amount;
+  }
+
+  async function dispenseCash() {
+    const res = await fetch(`http://localhost:8081/api/atm/dispense?qrCode=${encodeURIComponent(code)}`, {
+      method: "POST"
+    });
+    if (!res.ok) throw new Error("Dispense failed");
+    const data = await res.json();
+
+    denominationsList.innerHTML = "";
+    dispenseInfo.style.display = "none";
+    details.style.display = "block";
+
+    Object.keys(data).sort((a, b) => b - a).forEach((denom) => {
+      const li = document.createElement("li");
+      li.textContent = `$${denom} x ${data[denom]}`;
+      denominationsList.appendChild(li);
+    });
+
+    // ⏳ Auto-return after 20 seconds
+    setTimeout(() => {
+      window.location.href = "welcome.html";
+    }, 20000);
+  }
+
+  function goHome() {
+    window.location.href = "welcome.html";
+  }
+
+  (async function () {
+    try {
+      await fetchQRInfo();
+      await dispenseCash();
+    } catch (err) {
+      dispenseInfo.textContent = "❌ Error dispensing cash. Please contact admin.";
+      dispenseInfo.style.color = "red";
+      console.error("Error:", err);
+    }
+  })();
+</script>
+
+</body>
+</html>

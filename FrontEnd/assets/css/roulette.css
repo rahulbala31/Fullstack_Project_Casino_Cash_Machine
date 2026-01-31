@@ -1,0 +1,33 @@
+.roulette {
+  background: #2D7551;
+}
+
+.roulette-content {
+  padding-top: 5%;
+  padding-bottom: 3%;
+}
+
+.window {
+  display: block;
+  width: 1000px;
+  height: 450px;
+  overflow: hidden;
+}
+
+#wheel {
+  width: 100%;
+  cursor: pointer;
+}
+#wheel:hover {
+  animation: wheel 1s linear 0s infinite;
+}
+
+#wheel:active {
+  animation-play-state: paused;
+}
+
+@keyframes wheel {
+  100% {
+    transform: rotateZ(360deg);
+  }
+}
